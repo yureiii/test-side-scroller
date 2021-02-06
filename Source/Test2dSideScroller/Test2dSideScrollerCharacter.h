@@ -7,6 +7,7 @@
 #include "Test2dSideScrollerCharacter.generated.h"
 
 class UTextRenderComponent;
+class AIceProjectile;
 
 /**
  * This class is the default character for Test2dSideScroller, and it is responsible for all
@@ -61,8 +62,13 @@ protected:
 public:
 	ATest2dSideScrollerCharacter();
 
+	UPROPERTY(EditAnywhere, Category = "Projectile")
+	TSubclassOf<AIceProjectile> Projectile_;
+
 	/** Returns SideViewCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetSideViewCameraComponent() const { return SideViewCameraComponent; }
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+
+	void FireShot();
 };

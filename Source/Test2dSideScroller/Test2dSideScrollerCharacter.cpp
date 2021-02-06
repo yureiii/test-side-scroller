@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "Test2dSideScrollerCharacter.h"
+#include "IceProjectile.h"
 #include "PaperFlipbookComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -108,6 +109,7 @@ void ATest2dSideScrollerCharacter::SetupPlayerInputComponent(class UInputCompone
 	// Note: the 'Jump' action and the 'MoveRight' axis are bound to actual keys/buttons/sticks in DefaultInput.ini (editable from Project Settings..Input)
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("Fire", IE_Released, this, &ATest2dSideScrollerCharacter::FireShot);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ATest2dSideScrollerCharacter::MoveRight);
 
 	PlayerInputComponent->BindTouch(IE_Pressed, this, &ATest2dSideScrollerCharacter::TouchStarted);
@@ -154,4 +156,15 @@ void ATest2dSideScrollerCharacter::UpdateCharacter()
 			Controller->SetControlRotation(FRotator(0.0f, 0.0f, 0.0f));
 		}
 	}
+}
+
+void ATest2dSideScrollerCharacter::FireShot()
+{
+	const FRotator FireRotation = GetActorRotation();
+	const FVector SpawnLocation = GetActorLocation();
+	UWorld* const World = GetWorld();
+	if (World != nullptr) {
+		World->SpawnActor<AIceProjectile>(Projectile_, SpawnLocation, FireRotation);
+	}
+	UE_LOG(LogTemp, Log, TEXT("Fire"));
 }
